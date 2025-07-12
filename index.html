@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🛠️ Tutorial Bot WhatsApp - DPW OFFICIAL</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Fira Code', monospace;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4 sm:px-6 lg:px-8 py-6">
+    
+
+  <!-- Header -->
+  <header class="text-center mb-10">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-yellow-400 mb-2 drop-shadow-md">📚 Tutorial Bot WhatsApp</h1>
+    <p class="text-gray-300 text-sm sm:text-base">By @_DPW OFFICIAL X GPT & GILANG</p>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-screen-lg mx-auto grid gap-10">
+
+    <!-- Letakkan di dalam <body> -->
+<div class="fixed bottom-4 left-4 bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 z-50">
+  <button id="playBtn" class="text-sm font-bold bg-green-500 hover:bg-green-600 px-3 py-1 rounded transition duration-300">▶️ Putar Musik</button>
+  <span class="text-sm text-gray-300">Klik untuk mulai / jeda musik 🎵</span>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="https://files.catbox.moe/qhih8t.mp3" type="audio/mpeg">
+  Browser kamu tidak mendukung audio HTML5.
+</audio>
+
+<script>
+  const playBtn = document.getElementById('playBtn');
+  const music = document.getElementById('bgMusic');
+
+  let isPlaying = false;
+
+  playBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      music.pause();
+      playBtn.innerText = '▶️ Putar Musik';
+    } else {
+      music.play();
+      playBtn.innerText = '⏸️ Pause Musik';
+    }
+    isPlaying = !isPlaying;
+  });
+</script>
+
+
+
+    <!-- BAB 1 -->
+    <section class="glass p-6 rounded-xl border border-gray-700">
+      <h2 class="text-2xl font-bold text-blue-400 mb-2">📘 BAB 1: Apa Itu Bot WhatsApp?</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Bot WhatsApp adalah program otomatis yang dapat membaca dan membalas pesan secara real-time. Bot ini digunakan untuk berbagai tujuan seperti auto-reply, sistem layanan pelanggan, promosi, hingga sistem panel.
+        Kita akan membuat bot dengan sistem handler case dan konfigurasi global berbasis file <code>setting.js</code>.
+      </p>
+    </section>
+
+    <!-- BAB 2 -->
+    <section class="glass p-6 rounded-xl border border-gray-700">
+      <h2 class="text-2xl font-bold text-purple-400 mb-2">📁 BAB 2: Persiapan Awal</h2>
+      <ul class="text-gray-300 list-disc pl-5 text-sm">
+        <li>Install <code class="bg-gray-700 px-1 rounded text-yellow-300">Node.js</code></li>
+        <li>Gunakan <code class="bg-gray-700 px-1 rounded">Termux</code> (Android) atau <code class="bg-gray-700 px-1 rounded">CMD / Terminal</code></li>
+        <li>Install <code class="bg-gray-700 px-1 rounded">npm i baileys</code> atau library WA lainnya</li>
+        <li>Edit pakai VSCode atau editor kesukaanmu</li>
+      </ul>
+    </section>
+
+    <!-- BAB 3: Struktur File & Folder -->
+    <section class="glass p-6 rounded-xl border border-gray-700">
+      <h2 class="text-2xl font-bold text-pink-400 mb-2">🗂️ BAB 3: Struktur File & Folder</h2>
+      <pre class="bg-gray-800 rounded-xl p-4 text-sm text-white">
+📁 mybot-wa/
+├── index.js             # File utama untuk menjalankan bot
+├── bot.js               # Semua case switch (menu, ytmp3, dll) berada di sini
+├── setting.js           # Konfigurasi global seperti nomor owner, nama bot
+├── package.json         # Konfigurasi project npm
+├── database/            # Folder untuk menyimpan media (audio, gambar, dsb.)
+│   ├── image/
+      </pre>
+      <p class="text-gray-300 text-sm mt-2">
+        Semua fitur bot ditulis langsung di file <code class="text-yellow-300">bot.js</code> dengan sistem <strong>func-case</strong> (switch). Konfigurasi seperti owner dan nama bot diatur di <code class="text-yellow-300">setting.js</code>.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-16 text-center text-sm text-gray-500">
+    © 2025 DPW OFFICIAL. Dibuat dengan ❤️ & ChatGPT.
+  </footer>
+
+</body>
+</html>
