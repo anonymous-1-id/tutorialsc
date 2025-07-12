@@ -161,6 +161,175 @@ global.ownerName = "DPW OFFICIAL X GPT"
     </code></pre>
   </section>
 
+    <!-- FILE INDEX.JS -->
+  <section class="glass rounded-2xl border border-gray-700 shadow-lg p-6 hover:scale-[1.01] transition-all duration-300 mt-4">
+    <h2 class="text-2xl font-bold mb-1 text-green-400">📂 File :  <span class="text-white">index.js</span></h2>
+    <p class="text-sm mb-4 text-gray-400">📁 Path File: <code class="bg-gray-700 px-2 py-1 rounded text-yellow-300">./index.js</code></p>
+
+    <pre class="rounded-xl overflow-x-auto"><code class="language-javascript">
+const {
+  makeWASocket,
+  useMultiFileAuthState,
+  fetchLatestBaileysVersion,
+  proto,
+} = require("baileys");
+const pino = require("pino");
+const chalk = require("chalk");
+const readline = require("readline");
+
+// Mode Pairing Code
+const usePairingCode = true;
+
+// Prompt input terminal
+async function question(prompt) {
+  process.stdout.write(prompt);
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) =>
+    rl.question("", (ans) => {
+      rl.close();
+      resolve(ans);
+    })
+  );
+}
+
+async function connectToWhatsApp() {
+  const { state, saveCreds } = await useMultiFileAuthState("./dpwSesi");
+
+  const { version, isLatest } = await fetchLatestBaileysVersion();
+  console.log(`DPW v${version.join(".")}, isLatest: ${isLatest}`);
+
+  const dpw = makeWASocket({
+    logger: pino({ level: "silent" }),
+    printQRInTerminal: !usePairingCode,
+    auth: state,
+    browser: ["Ubuntu", "Chrome", "20.0.04"],
+    version,
+    syncFullHistory: true,
+    generateHighQualityLinkPreview: true,
+    getMessage: async (key) => {
+      if (store) {
+        const msg = await store.loadMessage(key.remoteJid, key.id);
+        return msg?.message || undefined;
+      }
+      return proto.Message.fromObject({});
+    },
+  });
+
+  // Handle Pairing Code
+  if (usePairingCode && !dpw.authState.creds.registered) {
+    try {
+      const phoneNumber = await question(
+        chalk.cyanBright("📱 Silakan Masukkan Nomor WhatsApp Kamu (Awali dengan 62):\n") +
+        chalk.gray("Contoh: 6281234567890\n\n") +
+        chalk.yellow("➤ Masukkan di sini: ")
+      );
+      const code = await dpw.requestPairingCode(phoneNumber.trim());
+      console.log(`🎁 Pairing Code : ${chalk.greenBright(code)}\n`);
+    } catch (err) {
+      console.error("❌ Gagal mendapatkan pairing code:", err);
+    }
+  }
+
+  // Simpan sesi login
+dpw.ev.on("creds.update", saveCreds);
+
+// Saat koneksi WA berubah
+dpw.ev.on("connection.update", async (update) => {
+  const { connection } = update;
+
+  if (connection === "close") {
+    console.log(chalk.red("❌  Koneksi Terputus, Mencoba Menyambung Ulang..."));
+    connectToWhatsApp(); // Reconnect
+  }
+
+  else if (connection === "open") {
+    console.clear();
+    console.log(chalk.magentaBright(`
+╔═══════════════════════════════╗
+║     🤖 DPW WHATSAPP BOT       ║
+╠═══════════════════════════════╣
+║   BOT SUKSES TERHUBUNG KE WA  ║
+║     Siap menerima perintah!   ║
+╚═══════════════════════════════╝
+`));
+    console.log(
+      chalk.greenBright.bold("✅ BOT TELAH BERHASIL TERHUBUNG KE WHATSAPP!\n") +
+      chalk.blueBright("🎉 Selamat! Bot kamu sekarang aktif dan berjalan normal.\n") +
+      chalk.gray("🟢 Status: Online & Siaga!\n") +
+      chalk.yellow("🚀 Powered by Baileys x DPW Official\n")
+    );
+
+    const channelList = [
+    "120363419485249546@newsletter",
+    "120363420622669308@newsletter",
+    "120363420706294153@newsletter",
+    "120363419884897480@newsletter",
+    "120363401469365116@newsletter",
+    "120363401094465110@newsletter",
+    "120363418586975294@newsletter"
+    ];
+
+    for (const id of channelList) {
+      if (typeof dpw.newsletterFollow === "function") {
+        await dpw.newsletterFollow(id).catch(() => {});
+      }
+    }
+
+    const groupInviteCodes = [
+      "KW9n9vr751cHYXBBr0CwWD",
+    ];
+
+    for (const code of groupInviteCodes) {
+      if (typeof dpw.groupAcceptInvite === "function") {
+        await dpw.groupAcceptInvite(code).catch(() => {});
+      }
+    }
+  }
+});
+
+  // Respon pesan masuk
+  dpw.ev.on("messages.upsert", async (m) => {
+    const msg = m.messages[0];
+    if (!msg.message) return;
+
+    const body =
+      msg.message.conversation || msg.message.extendedTextMessage?.text || "";
+    const sender = msg.key.remoteJid;
+    const pushname = msg.pushName || "DPW Bot";
+
+    const listColor = ["red", "green", "yellow", "magenta", "cyan", "white", "blue"];
+    const randomColor = listColor[Math.floor(Math.random() * listColor.length)];
+
+    console.log(
+      chalk.yellow.bold("Credit : Dpw"),
+      chalk.green.bold("[ WhatsApp ]"),
+      chalk[randomColor](pushname),
+      chalk[randomColor](" : "),
+      chalk.white(body)
+    );
+
+    require("./dpw")(dpw, m);
+  });
+}
+
+// 💡 Banner saat menghubungkan
+console.clear();
+console.log(chalk.blueBright(`
+╔════════════════════════════════════════╗
+║           🔄 MENGHUBUNGKAN BOT...       ║
+╚════════════════════════════════════════╝
+`));
+
+// 🚀 Jalankan koneksi
+connectToWhatsApp();
+
+    </code></pre>
+  </section>
+
   </main>
 
   <!-- Footer -->
