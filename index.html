@@ -330,6 +330,61 @@ connectToWhatsApp();
     </code></pre>
   </section>
 
+  <!-- FILE SETTING.JS -->
+  <section class="glass rounded-2xl border border-gray-700 shadow-lg p-6 hover:scale-[1.01] transition-all duration-300 mt-4">
+    <h2 class="text-2xl font-bold mb-1 text-green-400">📂 File :  <span class="text-white">bot.js</span></h2>
+    <p class="text-sm mb-4 text-gray-400">📁 Path File: <code class="bg-gray-700 px-2 py-1 rounded text-yellow-300">./bot.js</code></p>
+
+    <pre class="rounded-xl overflow-x-auto"><code class="language-javascript">
+require('./setting');
+const fs = require('fs');
+const axios = require('axios');
+const path = require('path');
+const { text } = require('stream/consumers');
+
+function loadRole() {
+    if (!fs.existsSync(rolePath)) {
+        fs.writeFileSync(rolePath, JSON.stringify({ owner: [], premium: [] }, null, 2));
+    }
+    return JSON.parse(fs.readFileSync(rolePath));
+}
+
+function saveRole(data) {
+    fs.writeFileSync(rolePath, JSON.stringify(data, null, 2));
+}
+
+function normalise(num) {
+    return String(num).replace(/[^0-9]/g, "");
+}
+
+// Prefix bisa array atau string, pastikan disesuaikan
+const prefix = ['!', '.', '/', '#'];
+
+module.exports = async (dpw, m) => {
+    const msg = m.messages[0];
+    if (!msg.message) return;
+
+    const body = msg.message.conversation || msg.message.extendedTextMessage?.text || "";
+    const sender = msg.key.remoteJid;
+    const pushname = msg.pushName || "dpw";
+    const args = body.slice(1).trim().split(" ");
+    const command = args.shift().toLowerCase();
+    const q = args.join(" ");
+
+    const usedPrefix = prefix.find(p => body.startsWith(p));
+    if (!usedPrefix) return;
+
+    const lenwyreply = (teks) => dpw.sendMessage(sender, { text: teks }, { quoted: msg });
+    const isGroup = sender.endsWith('@g.us');
+    const isAdmin = (typeof admin !== 'undefined') ? admin.includes(sender) : false;
+    const menuImage = fs.readFileSync(image);
+
+    switch (command) {
+        //tinggal add case sama func di sini
+
+    }}
+    </code></pre>
+  </section>
   </main>
 
   <!-- Footer -->
